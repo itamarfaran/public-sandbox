@@ -33,7 +33,6 @@ sd_a = 1 / np.sqrt(np.sum(inv_sds))
 
 inv_sds = n0 / np.power(s0, 2), n_b / np.power(s_b, 2)
 mu_b = np.average((mu0, m_b), weights=inv_sds)
-
 sd_b = 1 / np.sqrt(np.sum(inv_sds))
 
 
