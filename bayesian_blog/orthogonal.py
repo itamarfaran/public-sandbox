@@ -5,11 +5,11 @@ from scipy.special import betaln, eval_jacobi
 
 """
 see scipy.special.orthogonal.
-copied source code and implemented log trick to avoid  OverflowError
+copied source code and implemented log trick to avoid OverflowError
 """
 
 
-def gen_roots_and_weights(n, log_mu0, an_func, bn_func, f, df, mu):
+def _gen_roots_and_weights(n, log_mu0, an_func, bn_func, f, df, mu):
     """
     see _gen_roots_and_weights in scipy.special.orthogonal
     """
@@ -38,7 +38,8 @@ def gen_roots_and_weights(n, log_mu0, an_func, bn_func, f, df, mu):
 
 
 def roots_jacobi(n, alpha, beta):
-    r"""Gauss-Jacobi quadrature.
+    """
+    Gauss-Jacobi quadrature.
     see scipy.special.root_jacobi
     """
 
@@ -67,11 +68,12 @@ def roots_jacobi(n, alpha, beta):
     a = alpha
     b = beta
 
-    return gen_roots_and_weights(m, log_mu0, an_func, bn_func, f, df, True)
+    return _gen_roots_and_weights(m, log_mu0, an_func, bn_func, f, df, True)
 
 
 def roots_sh_jacobi(n, p1, q1, mu=False):
-    """Gauss-Jacobi (shifted) quadrature.
+    """
+    Gauss-Jacobi (shifted) quadrature.
     see scipy.special.roots_sh_jacobi
     used the log trick to integrate over large values of a,b
     """

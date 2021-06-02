@@ -54,7 +54,7 @@ d2_norm = norm(loc=np.log(mu_b) - np.log(mu_a), scale=np.sqrt((sd_a / mu_a)**2 +
 # In[calculate risk with gq]
 
 # The following throws an integer overflow error when a + b are too large
-# Use the log trick instead (see my PR at scipy)
+# Use the modified orthogonal.py instead
 def beta_gq(n, a, b):
     x, w, m = roots_sh_jacobi(n, a + b - 1, a, True)
     w /= m
