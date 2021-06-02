@@ -86,14 +86,14 @@ risk_norm = gq - norm.mean((mu_a, mu_b))
 
 if __name__ == '__main__':
     print(f'The probability the conversion in B is higher is {d1_beta.sf(0)}')
-    print(f'The 95% crediblity interval of (p_b/p_a-1) is {np.exp(d2_beta.ppf((.025, .975))) - 1}')
+    print(f'The 95% credibility interval of (p_b/p_a-1) is {np.exp(d2_beta.ppf((.025, .975))) - 1}')
     # >>> The probability the conversion in B is higher is 0.9040503042127781
-    # >>> The 95% crediblity interval of (p_b/p_a-1) is [-0.0489547   0.28350359]
+    # >>> The 95% credibility interval of (p_b/p_a-1) is [-0.0489547   0.28350359]
 
     print(f'The probability the average income in B is 2% lower (or worse) is {d2_norm.cdf(np.log(.98))}')
-    print(f'The 95% crediblity interval of (m_b - m_a) is {d1_norm.ppf((.025, .975))}')
+    print(f'The 95% credibility interval of (m_b - m_a) is {d1_norm.ppf((.025, .975))}')
     # >>> The probability the average income in B is 2% lower (or worse) is 0.00011622384023304196
-    # >>> The 95% crediblity interval of (m_b - m_a) is [-0.04834271  1.94494332]
+    # >>> The 95% credibility interval of (m_b - m_a) is [-0.04834271  1.94494332]
 
     print(f'The risk of choosing A is losing {risk_beta[0]} conversions per user.\n'
           f'The risk of choosing B is losing {risk_beta[1]} conversions per user.')
