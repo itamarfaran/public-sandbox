@@ -5,6 +5,7 @@ from orthogonal import roots_sh_jacobi
 
 
 # In[parameters definition]
+
 x_a, n_a = 254, 1283  # converted & total users in A
 x_b, n_b = 289, 1321  # converted & total users in B
 
