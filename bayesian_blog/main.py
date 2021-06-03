@@ -27,13 +27,13 @@ beta_b = beta_0 + n_b - x_b
 
 
 # updating Gaussian prior is a bit more tricky
-inv_sds = n0 / np.power(s0, 2), n_a / np.power(s_a, 2)
-mu_a = np.average((mu0, m_a), weights=inv_sds)
-sd_a = 1 / np.sqrt(np.sum(inv_sds))
+inv_vars = n0 / np.power(s0, 2), n_a / np.power(s_a, 2)
+mu_a = np.average((mu0, m_a), weights=inv_vars)
+sd_a = 1 / np.sqrt(np.sum(inv_vars))
 
-inv_sds = n0 / np.power(s0, 2), n_b / np.power(s_b, 2)
-mu_b = np.average((mu0, m_b), weights=inv_sds)
-sd_b = 1 / np.sqrt(np.sum(inv_sds))
+inv_vars = n0 / np.power(s0, 2), n_b / np.power(s_b, 2)
+mu_b = np.average((mu0, m_b), weights=inv_vars)
+sd_b = 1 / np.sqrt(np.sum(inv_vars))
 
 
 # In[calculate "easy" metrics]
