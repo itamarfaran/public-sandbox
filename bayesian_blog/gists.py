@@ -6,7 +6,7 @@ m_a, s_a = 52.3, 14.1  # average & sd over users in A
 m_b, s_b = 52.8, 13.7  # average & sd over users in B
 
 alpha_0, beta_0 = 1, 1  # Beta prior
-mu0, s0, n0 = 0, 1, 1  # Gaussian prior
+mu0, s0, n0 = 0, 1, 0  # Gaussian prior
 
 
 # In[2]
