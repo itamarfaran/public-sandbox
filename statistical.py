@@ -1,3 +1,5 @@
+# TODO: add documentation and markdowns
+
 from collections.abc import Sequence
 
 import numpy as np
