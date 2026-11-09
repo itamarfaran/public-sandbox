@@ -21,6 +21,41 @@ The functions return the *treatment value*, not the difference. The absolute MDE
 
 ---
 
+## Use in the automatic sample size calculator
+
+These functions are the statistical core of the automatic sample size calculator service. For
+each KPI of a test, the service queries how the KPI performed historically over the last few
+weeks (the number of weeks is a global setting) and computes the MDE from that data. The inputs
+come from these sources:
+
+| Input | Source |
+| --- | --- |
+| `alpha`, `power` | Company-level settings, passed into the formula. |
+| `n` | Estimated from the historical query. |
+| `p` (or `mu` and `sigma`) | Estimated from the historical query: the KPI's baseline. |
+| `xi` | The test parameters: the exposure to group B. For A/B/C/… tests, the group sizes, control first. |
+
+The service then solves for the treatment value, `p_B` (called `p2` in the service spec, with
+`p1 = p`). It reports the MDE as `p2 / p1 - 1` (relative) or `p2 - p1` (absolute).
+`calculate_p_B` handles conversion-rate KPIs. `calculate_mu_B` handles continuous KPIs (the
+"T-test" case, using the variance estimated from the query). Both support A/B/C/… tests through
+the sequence form of `xi`.
+
+The service can be triggered:
+
+- automatically, during test registration,
+- manually, from the UI tab, and
+- by other services, when needed.
+
+**Open design question:** the service owner still has to decide whether one call should accept
+several KPIs (fewer historical queries) or whether a test with several KPIs should trigger the
+service once per KPI, in parallel.
+
+Because the inputs come from weeks of traffic, `n` is normally in the thousands or more. At that
+scale the small-sample and pooled-variance caveats below do not apply.
+
+---
+
 ## Shared parameters
 
 | Parameter | Meaning |
@@ -94,6 +129,8 @@ $$
 
 **Caveat:** this uses the normal approximation. For small groups, a t-based calculation is exact
 and gives a slightly larger MDE, so this result is somewhat optimistic (anti-conservative) there.
+With more than a few thousand samples the difference is negligible and this caveat does not
+apply.
 
 ---
 
@@ -127,7 +164,9 @@ the upward effect ($p_B > p$).
 Notes:
 
 - The result matches a test that uses the **unpooled** standard error. A test that uses the pooled
-  standard error under $H_0$ has slightly different power.
+  standard error under $H_0$ has slightly different power. With more than a few thousand samples
+  the MDE is small, so the two standard errors are almost identical and the choice does not
+  matter.
 - If the root is above 1, no achievable conversion rate is detectable with this sample size, and
   the function returns `nan`.
 - Only increases are computed. To get a downward MDE, use the lower root of the same quadratic.
@@ -191,7 +230,8 @@ or if any size is not positive.
 **Caveats:**
 
 - Like the rest of the module, this is the large-sample (known-variance) z version. It is slightly
-  anti-conservative for small groups compared with the exact t-based Dunnett value.
+  anti-conservative for small groups compared with the exact t-based Dunnett value. With more
+  than a few thousand samples the two values are practically the same.
 - The correlation formula assumes equal variances across groups. For proportions, where variance
   depends on the rate, this is an approximation.
 
