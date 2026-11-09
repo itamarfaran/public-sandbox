@@ -27,6 +27,7 @@ def calculate_p_B(
     xi: float | Sequence[float],
     alpha: float,
     power: float,
+    upper: bool = True,
 ) -> float:
     """
     n: total sample size
@@ -50,9 +51,9 @@ def calculate_p_B(
     c = n * xi_t * p**2 - z_sq * xi_t * p * (1 - p) / xi0
 
     discriminant = b**2 - 4 * a * c
-    p_B = (-b + np.sqrt(discriminant)) / (2 * a)
-
-    return p_B if p_B <= 1 else float("nan")
+    sign = 1 if upper else -1
+    p_B = (-b + sign * np.sqrt(discriminant)) / (2 * a)
+    return p_B if 0 <= p_B <= 1 else float("nan")
 
 
 def calculate_mu_B(
@@ -62,6 +63,7 @@ def calculate_mu_B(
     xi: float | Sequence[float],
     alpha: float,
     power: float,
+    upper: bool = True,
 ) -> float:
     """
     n: total sample size
@@ -79,7 +81,8 @@ def calculate_mu_B(
     d, xi0, xi_t = _d_and_xi(xi, alpha)
     z_sum = d + stats.norm.ppf(power)
     se = sigma * np.sqrt(1 / (n * xi_t) + 1 / (n * xi0))
-    return mu + z_sum * se
+    sign = 1 if upper else -1
+    return mu + sign * z_sum * se
 
 
 def dunnett_d(
